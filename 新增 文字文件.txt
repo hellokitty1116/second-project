@@ -1,0 +1,272 @@
+======================================================Class login=============================================
+//彈出對話框
+
+JOptionPane.showMessageDialog(null,"歡迎進入小當家商店系統");
+
+//離開的按鈕
+		
+		 JButton btnNewButton = new JButton("關閉視窗");
+		 btnNewButton.addMouseListener(new MouseAdapter() {
+		 	@Override
+		 	public void mouseClicked(MouseEvent e) {
+		 		JOptionPane.showMessageDialog(null,"謝謝光臨,歡迎下次再來");
+				System.exit(0);	
+		 	}
+		 });
+
+//登入商店的按鈕!
+ 
+		    JButton btnNewButton_1 = new JButton("登入商店");
+		    btnNewButton_1.addMouseListener(new MouseAdapter() {
+		    	@Override
+		    	public void mouseClicked(MouseEvent e) {
+		    		String username= textField.getText();
+		    		String password = textField_1.getText();
+
+
+***********正下方那一行程式為預設密碼的關鍵*********************************************
+		    		if (username.equals("ABC") && password.equals("abc123")) {
+		    			chineseshop success = new chineseshop();
+		    			 success.setVisible(true);
+		    			 dispose();
+		    		}else { JOptionPane.showMessageDialog(null, "帳號或密碼錯誤,請重新輸入");
+		    		textField.setText("");
+		            textField_1.setText("");
+		    		}
+		    		
+		    	}
+		    });
+
+====================================class items=================================================
+        String name;
+	int sprouts;
+	int friedrice;
+	int tofu;
+	int dumplings;
+	int sum;
+	double discount;
+	public items(String name, int sprouts, int friedrice, int tofu, int dumplings) {
+		super();
+		if(sprouts>=0 && friedrice>=0 && tofu>=0  && dumplings>=0){
+		this.name = name;
+		this.sprouts = sprouts;
+		this.friedrice = friedrice;
+		this.tofu = tofu;
+		this.dumplings = dumplings;
+		this.discount = 1.0;
+		this.sum=888*sprouts+260*friedrice+299*tofu+180*dumplings;}
+		else {
+            throw new IllegalArgumentException("數量不能低於0");
+        }
+	}
+
+//計算折扣的方法
+
+public String show(double discountedTotal, double discount) {
+	    String discountInfo;
+	    if (discount == 0.7) {
+	        discountInfo = "尊貴的米其林評審" + name + "您好，\n總費用享7折優待\n總金額為：" + discountedTotal + " 元";
+	    } else if (discount == 0.8) {
+	        discountInfo = "高級美食鑑賞家" + name + "您好，\n總費用享8折優待\n總金額為：" + discountedTotal + " 元";
+	    } else if (discount == 0.9) {
+	        discountInfo = "歡迎光臨本店新開幕！\n總費用享9折優待\n總金額為：" + discountedTotal + " 元";
+	    } else {
+	        discountInfo = "總金額：" + discountedTotal + " 元";
+	    }
+	    return "訂餐人員：" + getName() +
+	            "\n熊貓麻婆：" + getTofu() +
+	            "\n鳳凰水晶：" + getSprouts() +
+	            "\n昇龍餃子：" + getDumplings() +
+	            "\n彗星炒飯：" + getFriedrice() +
+	            "\n原餐點費用：" + getSum() +
+	            "\n" + discountInfo;
+	}
+	
+
+===============================================================class chineseshop===========================================
+
+//額外宣告的物件
+
+	private int totalAmount; //用來抓取訂單結算的金額
+	private String beleg; //用來抓取剛才訂單的結果
+
+
+
+//預設文字的地方
+
+		money = new JTextField("請輸入金額");
+		money.setForeground(Color.GRAY); // 預設字體為灰色
+		money.setFont(new Font("微軟正黑體", Font.BOLD, 30));
+		money.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (money.getText().equals("請輸入金額")) {
+					money.setText(""); // 當獲得焦點時，清空預設文字
+					money.setForeground(Color.BLACK); // 將文字顏色改為黑色
+				}
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (money.getText().isEmpty()) {
+					money.setText("請輸入金額"); // 當失去焦點且內容為空時，恢復預設文字
+					money.setForeground(Color.GRAY); // 將文字顏色改回灰色
+				}
+			}
+		});
+
+
+//離開的按鈕
+
+                JButton btnNewButton = new JButton("離開");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JOptionPane.showMessageDialog(null, "謝謝惠顧");
+				System.exit(0);
+			}
+		});
+
+//找零的按鈕
+			
+		
+		JButton btnNewButton_1_2 = new JButton("找零");
+		btnNewButton_1_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String moneyValue = money.getText();
+				int moneyInt = Integer.parseInt(moneyValue);
+				if (moneyInt >= totalAmount) {
+			        // 計算找零
+			        int change = moneyInt - totalAmount;
+			        int thousandCount = change / 1000;
+			        int hundredCount = (change % 1000) / 100;
+			        int fiftyCount = (change % 100) / 50;
+			        int tenCount = (change % 50) / 10;
+			        int fiveCount = (change % 10) / 5;
+			        int oneCount = change % 5;
+
+			        // 輸出找零結果到 JTextArea
+			        receipt.setText(beleg+ "\n找您共: " + change + "元"
+			                        + "\n以下是找您的鈔票及硬幣數量："
+			                        + "\n一千元鈔票: " + thousandCount + "張"
+			                        + "\n一百元鈔票: " + hundredCount + "張"
+			                        + "\n五十元硬幣: " + fiftyCount + "個"
+			                        + "\n十元硬幣: " + tenCount + "個"
+			                        + "\n五元硬幣: " + fiveCount + "個"
+			                        + "\n一元硬幣: " + oneCount + "個");
+			    } else {
+			        // 提示金額不足
+			        JOptionPane.showMessageDialog(null, "金額不足，請補足金額");
+			    }
+		           
+		       
+			}});
+
+//列印明細的按鈕
+
+			JButton btnNewButton_2 = new JButton("列印明細");
+		btnNewButton_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				 
+				receipt.setForeground(new Color(0, 0, 0));//打印時更改字體顏色
+				receipt.setFont(new Font("微軟正黑體", Font.BOLD, 17));//打印時更改字體
+				// Create a PrinterJob
+			        PrinterJob printerJob = PrinterJob.getPrinterJob();
+
+			        // Set the JTextArea as the Printable
+			        printerJob.setPrintable(receipt.getPrintable(null, null));
+
+			        // Show print dialog
+			        if (printerJob.printDialog()) {
+			            try {
+			                // Print the JTextArea content
+			                printerJob.print();
+			                System.exit(0);
+			            } catch (PrinterException ex) {
+			                ex.printStackTrace();
+			                receipt.setForeground(new Color(255, 0, 0));
+			                receipt.setFont(new Font("微軟正黑體", Font.BOLD, 25));
+			            }
+			        } else {
+			            // 取消打印時,用這個字體顏色
+			            receipt.setForeground(new Color(255, 0, 0));
+			            receipt.setFont(new Font("微軟正黑體", Font.BOLD, 25));
+			        }
+   
+
+			}
+		});
+
+//結帳的按鈕
+
+		
+		JButton btnNewButton_1 = new JButton("結帳");
+		btnNewButton_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				String Name = name.getText();
+				String Tofu = tofu.getText();
+				String Sprouts = sprouts.getText();
+				String Dumplings = dumplings.getText();
+				String Friedrice = friedrice.getText();
+
+				items oder = new items(Name, Integer.parseInt(Tofu), Integer.parseInt(Sprouts),
+						Integer.parseInt(Dumplings), Integer.parseInt(Friedrice));
+
+				double discount = 1.0;
+				if (judge.isSelected()) {
+					discount = 0.7;
+				} else if (connoisseur.isSelected()) {
+					discount = 0.8;
+				} else if (customer.isSelected()) {
+					discount = 0.9;
+				}
+				double discountedTotal = discount * oder.getSum();
+				int all = (int) Math.round(discountedTotal);
+				String receiptText = oder.show(all, discount);
+				totalAmount = all;
+				beleg= oder.show(all, discount);
+
+				receipt.setText(receiptText);
+
+			}
+		});
+
+
+//重來的按鈕
+   			JButton btnNewButton_1_1 = new JButton("重來");
+		btnNewButton_1_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				receipt.setText("");
+				name.setText("");
+				tofu.setText("");
+				sprouts.setText("");
+				dumplings.setText("");
+				friedrice.setText("");
+				money.setText("");
+				buttonGroup.clearSelection();
+				
+			}
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
